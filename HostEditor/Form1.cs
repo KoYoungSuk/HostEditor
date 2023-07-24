@@ -19,7 +19,36 @@ namespace HostEditor
         {
             InitializeComponent();
             openHOSTFile();
+            label5.Text = checkOS(); 
         }
+
+
+        #region["OS 버전 확인"]
+        public String checkOS()
+        {
+            string HKLMWinNTCurrent = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion";
+            string osName = Registry.GetValue(HKLMWinNTCurrent, "productName", "").ToString();
+            string osBuild = Registry.GetValue(HKLMWinNTCurrent, "CurrentBuildNumber", "").ToString();
+            String label;
+            String[] osName_arr = osName.Split(' ');
+            if (osName_arr[1].Equals("10"))
+            {
+                if (Int32.Parse(osBuild) > 22000) //Windows 11 및 Windows 10/Server 2016~2022 구분 
+                {
+                    label = "Your Operating System : Windows 11 " + osName_arr[2] + " Build: " + osBuild;
+                }
+                else
+                {
+                    label = "Your Operating System : " + osName + " Build: " + osBuild;
+                }
+            }
+            else
+            {
+                label = "Your Operating System : " + osName + " Build: " + osBuild;
+            }
+            return label;
+        }
+        #endregion
 
         public void openHOSTFile()
         {
@@ -108,6 +137,11 @@ namespace HostEditor
         #endregion
 
         private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
         {
 
         }
